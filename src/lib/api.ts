@@ -4,6 +4,8 @@ import type { CommandCenterData, IntakePayload, IntakeResponse } from "./types";
 const API_URL = import.meta.env.VITE_BECS_API_URL?.replace(/\/$/, "") || "";
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 let lastDashboardFetchStatus = "Not started";
+const BACKEND_UNREACHABLE_HINT =
+  "Backend unreachable. Confirm VITE_BECS_API_URL points to the Render backend, the service is awake, and CORS allows this frontend domain.";
 
 function authHeaders(hasBody = false): HeadersInit {
   const headers: Record<string, string> = {};
@@ -27,6 +29,11 @@ async function parseJson<T>(response: Response): Promise<T> {
   return text ? (JSON.parse(text) as T) : ({} as T);
 }
 
+function apiErrorMessage(endpoint: string, error: unknown) {
+  const detail = error instanceof Error ? error.message : String(error);
+  return `${BACKEND_UNREACHABLE_HINT} Endpoint: ${API_URL}${endpoint}. Detail: ${detail}`;
+}
+
 export async function fetchCommandCenter(): Promise<CommandCenterData> {
   if (!API_URL) {
     lastDashboardFetchStatus = "Demo data loaded";
@@ -43,8 +50,9 @@ export async function fetchCommandCenter(): Promise<CommandCenterData> {
     lastDashboardFetchStatus = "Live fetch succeeded";
     return data;
   } catch (error) {
-    lastDashboardFetchStatus = error instanceof Error ? `Live fetch failed: ${error.message}` : "Live fetch failed";
-    throw error;
+    const message = apiErrorMessage("/api/command-center", error);
+    lastDashboardFetchStatus = `Live fetch failed: ${message}`;
+    throw new Error(message);
   }
 }
 
@@ -66,22 +74,26 @@ export async function submitIntakeEvent(payload: IntakePayload): Promise<IntakeR
     };
   }
 
-  const response = await fetch(`${API_URL}/api/events`, {
-    method: "POST",
-    headers: authHeaders(true),
-    body: JSON.stringify({
-      source: "frontend",
-      request_summary: payload.request_summary.trim(),
-      detailed_notes: payload.detailed_notes.trim(),
-      suggested_entity: payload.suggested_entity,
-      due_date: payload.due_date.trim(),
-      response_needed: payload.response_needed,
-      calendar_needed: payload.calendar_needed,
-      related_file_url: payload.related_file_url.trim(),
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/api/events`, {
+      method: "POST",
+      headers: authHeaders(true),
+      body: JSON.stringify({
+        source: "frontend",
+        request_summary: payload.request_summary.trim(),
+        detailed_notes: payload.detailed_notes.trim(),
+        suggested_entity: payload.suggested_entity,
+        due_date: payload.due_date.trim(),
+        response_needed: payload.response_needed,
+        calendar_needed: payload.calendar_needed,
+        related_file_url: payload.related_file_url.trim(),
+      }),
+    });
 
-  return parseJson<IntakeResponse>(response);
+    return parseJson<IntakeResponse>(response);
+  } catch (error) {
+    throw new Error(apiErrorMessage("/api/events", error));
+  }
 }
 
 export const apiConfig = {

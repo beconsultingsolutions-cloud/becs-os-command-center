@@ -42,12 +42,12 @@ npm run preview
 Create `.env.local` from `.env.example`:
 
 ```bash
-VITE_BECS_API_URL=https://eorkllalnzottuhejdrl.supabase.co/functions/v1/becs-os-api-v3
+VITE_BECS_API_URL=https://<your-render-backend>.onrender.com
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
 ```
 
-`VITE_BECS_API_URL` controls live API mode. If it is missing, the app runs in demo mode with local demo dashboard data.
+`VITE_BECS_API_URL` controls live API mode and must point to the deployed Render backend base URL. If it is missing, the app runs in demo mode with local demo dashboard data.
 
 `VITE_SUPABASE_URL` is displayed for operator visibility when available.
 

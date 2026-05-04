@@ -22,10 +22,12 @@ The app uses hash routing, so no special rewrite rules are required for client r
 Set these in the deployment provider before building:
 
 ```text
-VITE_BECS_API_URL=https://eorkllalnzottuhejdrl.supabase.co/functions/v1/becs-os-api-v3
+VITE_BECS_API_URL=https://<your-render-backend>.onrender.com
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
 ```
+
+For production, `VITE_BECS_API_URL` must be the Render backend base URL. Do not point production at localhost or leave it empty, or the frontend will run in demo mode.
 
 Only use a public Supabase anon key in `VITE_SUPABASE_ANON_KEY`. Never put a service-role key, database password, OpenAI key, or other private secret in a Vite frontend variable.
 
@@ -69,6 +71,23 @@ After deployment, open the site and confirm:
 - The last dashboard fetch status is either `Live fetch succeeded` or a clear backend/API error.
 - Intake submission reaches the configured `/api/events` endpoint.
 - The backend CORS policy allows `https://becs.agency.com`.
+
+## Backend CORS
+
+The Render backend must allow requests from:
+
+```text
+https://becs.agency.com
+https://<your-vercel-project>.vercel.app
+http://localhost:5173
+```
+
+The backend should allow at least these methods and headers:
+
+```text
+Methods: GET, POST, OPTIONS
+Headers: Content-Type, Authorization, apikey
+```
 
 ## Recommendation
 
