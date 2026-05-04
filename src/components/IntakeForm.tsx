@@ -8,14 +8,20 @@ import { formatConfidence } from "./DataTables";
 const defaultPayload: IntakePayload = {
   request_summary: "",
   detailed_notes: "",
-  suggested_entity: "Unsure",
+  suggested_entity: "unsure",
   due_date: "",
   response_needed: false,
   calendar_needed: false,
   related_file_url: "",
 };
 
-const entityOptions: IntakePayload["suggested_entity"][] = ["BECS", "Lane Ellis", "Me & Them", "4FREQ", "Unsure"];
+const entityOptions: { label: string; value: IntakePayload["suggested_entity"] }[] = [
+  { label: "BECS", value: "becs" },
+  { label: "LEAA", value: "leaa" },
+  { label: "Me & Them", value: "me-and-them" },
+  { label: "4FREQ", value: "fourfreq" },
+  { label: "Unsure", value: "unsure" },
+];
 
 export function IntakeForm({ onSubmitted }: { onSubmitted: () => void }) {
   const [payload, setPayload] = useState<IntakePayload>(defaultPayload);
@@ -88,7 +94,7 @@ export function IntakeForm({ onSubmitted }: { onSubmitted: () => void }) {
                 value={payload.suggested_entity}
               >
                 {entityOptions.map((entity) => (
-                  <option key={entity} value={entity}>{entity}</option>
+                  <option key={entity.value} value={entity.value}>{entity.label}</option>
                 ))}
               </select>
               <small>Pick Unsure to let the classifier route it.</small>

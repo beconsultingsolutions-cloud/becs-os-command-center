@@ -292,6 +292,26 @@ td:first-child {
   font-size: 0.875rem;
 }
 
+.entity-selector {
+  display: flex;
+  min-width: 12rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.entity-selector span {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.entity-selector select {
+  height: 2.25rem;
+  min-width: 10rem;
+  padding: 0.35rem 0.6rem;
+}
+
 .main-content {
   min-height: 0;
   flex: 1;
@@ -522,6 +542,12 @@ td:first-child {
 
 .table-wrap {
   overflow-x: auto;
+}
+
+.table-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .badge {
@@ -921,6 +947,18 @@ a:focus-visible {
 
   .topbar p {
     display: none;
+  }
+
+  .entity-selector {
+    min-width: 0;
+  }
+
+  .entity-selector span {
+    display: none;
+  }
+
+  .entity-selector select {
+    min-width: 8.5rem;
   }
 
   .page,

@@ -13,6 +13,7 @@ const routes = [
   ["#/triggers", "Triggers"],
   ["#/automation", "Automation Logs"],
   ["#/calendar", "Calendar"],
+  ["#/training", "Training"],
 ];
 
 const browser = await chromium.launch();

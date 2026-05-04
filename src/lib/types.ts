@@ -66,6 +66,26 @@ export type ConnectionInfo = {
   mode: string;
   supabaseUrl?: string;
   backendUrl?: string;
+  selectedEntity?: string;
+};
+
+export type EntitySlug = "all" | "becs" | "leaa" | "me-and-them" | "fourfreq";
+
+export type EntityOption = {
+  slug: EntitySlug;
+  label: string;
+};
+
+export type TrainingLesson = {
+  id?: string;
+  title: string;
+  slug?: string;
+  description?: string;
+  lesson_type?: string;
+  pes_phase?: string;
+  module?: string;
+  order_index?: number;
+  status?: string;
 };
 
 export type CommandCenterData = {
@@ -82,12 +102,13 @@ export type CommandCenterData = {
   triggers: TriggerItem[];
   automationRuns: TriggerItem[];
   intakeEvents: IntakeEvent[];
+  trainingLessons?: TrainingLesson[];
 };
 
 export type IntakePayload = {
   request_summary: string;
   detailed_notes: string;
-  suggested_entity: "BECS" | "Lane Ellis" | "Me & Them" | "4FREQ" | "Unsure";
+  suggested_entity: "becs" | "leaa" | "me-and-them" | "fourfreq" | "unsure";
   due_date: string;
   response_needed: boolean;
   calendar_needed: boolean;
@@ -124,4 +145,5 @@ export type RouteKey =
   | "approvals"
   | "triggers"
   | "automation"
-  | "calendar";
+  | "calendar"
+  | "training";

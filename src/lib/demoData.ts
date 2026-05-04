@@ -70,4 +70,28 @@ export const demoData: CommandCenterData = {
       },
     },
   ],
+  trainingLessons: [
+    {
+      id: "lesson-1",
+      title: "PES Operating Model",
+      slug: "pes-operating-model",
+      description: "Introduction to Plan, Evolve, Succeed as the BECS OS operating model.",
+      lesson_type: "overview",
+      pes_phase: "Plan",
+      module: "BECS OS Foundations",
+      order_index: 1,
+      status: "active",
+    },
+    {
+      id: "lesson-2",
+      title: "5C Onboarding System",
+      slug: "5c-onboarding-system",
+      description: "How Compliance, Clarity, Culture, Connection, and Checkback organize onboarding.",
+      lesson_type: "process",
+      pes_phase: "Evolve",
+      module: "BECS OS Foundations",
+      order_index: 2,
+      status: "active",
+    },
+  ],
 };

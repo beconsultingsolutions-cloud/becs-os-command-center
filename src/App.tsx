@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { fetchCommandCenter } from "./lib/api";
-import type { CommandCenterData, RouteKey } from "./lib/types";
+import type { CommandCenterData, EntitySlug, RouteKey } from "./lib/types";
 import { Layout } from "./components/Layout";
 import { HealthCheck } from "./components/HealthCheck";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui";
@@ -16,6 +16,7 @@ import { Overview } from "./pages/Overview";
 import { Projects } from "./pages/Projects";
 import { SalesPipeline } from "./pages/SalesPipeline";
 import { Tasks } from "./pages/Tasks";
+import { Training } from "./pages/Training";
 import { Triggers } from "./pages/Triggers";
 
 const routeByHash: Record<string, RouteKey> = {
@@ -31,6 +32,7 @@ const routeByHash: Record<string, RouteKey> = {
   "/triggers": "triggers",
   "/automation": "automation",
   "/calendar": "calendar",
+  "/training": "training",
 };
 
 const pathByRoute = Object.fromEntries(
@@ -44,6 +46,7 @@ function readRouteFromHash(): RouteKey {
 
 export default function App() {
   const [route, setRoute] = useState<RouteKey>(() => readRouteFromHash());
+  const [selectedEntity, setSelectedEntity] = useState<EntitySlug>("all");
   const [data, setData] = useState<CommandCenterData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setLoading] = useState(true);
@@ -52,13 +55,13 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      setData(await fetchCommandCenter());
+      setData(await fetchCommandCenter(selectedEntity));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Command center unavailable");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedEntity]);
 
   useEffect(() => {
     if (!window.location.hash) window.location.hash = "#/";
@@ -78,7 +81,7 @@ export default function App() {
 
   return (
     <>
-      <Layout activeRoute={route} onNavigate={navigate}>
+      <Layout activeRoute={route} onEntityChange={setSelectedEntity} onNavigate={navigate} selectedEntity={selectedEntity}>
         {isLoading && <LoadingState />}
         {!isLoading && error && <ErrorState error={error} onRetry={loadData} />}
         {!isLoading && !error && data && renderRoute(route, data, loadData)}
@@ -112,6 +115,8 @@ function renderRoute(route: RouteKey, data: CommandCenterData, reload: () => voi
       return <AutomationLogs data={data} />;
     case "calendar":
       return <Calendar data={data} />;
+    case "training":
+      return <Training data={data} />;
     case "overview":
     default:
       return <Overview data={data} />;

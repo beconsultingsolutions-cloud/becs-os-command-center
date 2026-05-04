@@ -17,6 +17,7 @@ export const pageMeta: Record<RouteKey, { title: string; description: string }> 
   triggers: { title: "Triggers", description: "Human-readable registry of the coded automation rules." },
   automation: { title: "Automation Logs", description: "Audit trail of trigger matches, outcomes, failures, and approvals." },
   calendar: { title: "Calendar", description: "Deadline, review, reminder, and scheduling control layer." },
+  training: { title: "Training", description: "PES, 5C, and entity operating lessons for the BECS OS training center." },
 };
 
 export function PageShell({

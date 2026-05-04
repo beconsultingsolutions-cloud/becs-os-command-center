@@ -17,7 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
-import type { RouteKey } from "../lib/types";
+import type { EntityOption, EntitySlug, RouteKey } from "../lib/types";
 import { BrandMark } from "./BrandMark";
 import { Button, cn } from "./ui";
 
@@ -43,14 +43,27 @@ const systemNav: NavItem[] = [
   { route: "triggers", title: "Triggers", icon: Workflow },
   { route: "automation", title: "Automation", icon: Zap },
   { route: "calendar", title: "Calendar", icon: CalendarClock },
+  { route: "training", title: "Training", icon: FileText },
+];
+
+const entityOptions: EntityOption[] = [
+  { slug: "all", label: "All entities" },
+  { slug: "becs", label: "BECS" },
+  { slug: "leaa", label: "LEAA" },
+  { slug: "me-and-them", label: "Me & Them" },
+  { slug: "fourfreq", label: "4FREQ" },
 ];
 
 export function Layout({
   activeRoute,
+  selectedEntity,
+  onEntityChange,
   onNavigate,
   children,
 }: {
   activeRoute: RouteKey;
+  selectedEntity: EntitySlug;
+  onEntityChange: (entity: EntitySlug) => void;
   onNavigate: (route: RouteKey) => void;
   children: ReactNode;
 }) {
@@ -93,6 +106,19 @@ export function Layout({
             </Button>
             <p>Digital operating system for entity-level work</p>
           </div>
+          <label className="entity-selector">
+            <span>Entity</span>
+            <select
+              aria-label="Select entity"
+              data-testid="select-entity"
+              onChange={(event) => onEntityChange(event.target.value as EntitySlug)}
+              value={selectedEntity}
+            >
+              {entityOptions.map((entity) => (
+                <option key={entity.slug} value={entity.slug}>{entity.label}</option>
+              ))}
+            </select>
+          </label>
           <Button
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             onClick={() => setTheme((value) => (value === "dark" ? "light" : "dark"))}
