@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { fetchCommandCenter } from "./lib/api";
 import type { CommandCenterData, RouteKey } from "./lib/types";
 import { Layout } from "./components/Layout";
@@ -76,11 +77,14 @@ export default function App() {
   };
 
   return (
-    <Layout activeRoute={route} onNavigate={navigate}>
-      {isLoading && <LoadingState />}
-      {!isLoading && error && <ErrorState error={error} onRetry={loadData} />}
-      {!isLoading && !error && data && renderRoute(route, data, loadData)}
-    </Layout>
+    <>
+      <Layout activeRoute={route} onNavigate={navigate}>
+        {isLoading && <LoadingState />}
+        {!isLoading && error && <ErrorState error={error} onRetry={loadData} />}
+        {!isLoading && !error && data && renderRoute(route, data, loadData)}
+      </Layout>
+      <Analytics />
+    </>
   );
 }
 
