@@ -2,6 +2,8 @@
 
 BECS OS Command Center is a static React/Vite frontend. It can be deployed to Netlify, Vercel, Render Static Sites, or any static host that serves the generated `dist/` directory.
 
+Production URL: `https://becs.agency.com`
+
 ## Required Build Settings
 
 Use these settings for all static hosts:
@@ -61,10 +63,12 @@ No serverless functions are required for this frontend-only deployment.
 After deployment, open the site and confirm:
 
 - The command center route `#/` renders.
+- The production domain `https://becs.agency.com` resolves to the deployed frontend.
 - The health check shows `API mode: Live` when `VITE_BECS_API_URL` is set.
 - The health check shows `API URL configured: Yes`.
 - The last dashboard fetch status is either `Live fetch succeeded` or a clear backend/API error.
 - Intake submission reaches the configured `/api/events` endpoint.
+- The backend CORS policy allows `https://becs.agency.com`.
 
 ## Recommendation
 

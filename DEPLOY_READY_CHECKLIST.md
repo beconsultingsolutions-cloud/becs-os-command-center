@@ -1,5 +1,7 @@
 # Deploy Ready Checklist
 
+Production URL: `https://becs.agency.com`
+
 ## Local Build
 
 - Passed: `npm run build`
@@ -58,7 +60,7 @@ Render Static Site is also acceptable if BECS infrastructure is already organize
 
 - Confirm the deployed BECS OS API responds at `/api/command-center`.
 - Confirm intake submissions are accepted at `/api/events`.
-- Confirm CORS allows the final deployed frontend domain.
+- Confirm CORS allows the production frontend domain: `https://becs.agency.com`.
 - Confirm the public Supabase anon key, if required, is scoped appropriately through Supabase policies.
 - Confirm live dashboard response fields match the frontend types in `src/lib/types.ts`.
 - Confirm production monitoring/log review for Supabase Edge Function failures.
