@@ -29,6 +29,26 @@ async function parseJson<T>(response: Response): Promise<T> {
   return text ? (JSON.parse(text) as T) : ({} as T);
 }
 
+async function parseRequiredJson<T extends object>(response: Response, endpoint: string): Promise<T> {
+  if (!response.ok) {
+    const message = (await response.text()) || response.statusText;
+    throw new Error(`${response.status}: ${message}`);
+  }
+
+  const text = await response.text();
+  if (!text.trim()) {
+    throw new Error(
+      `Empty response from ${API_URL}${endpoint}. Confirm VITE_BECS_API_URL points to the Render API service, not the frontend deployment.`,
+    );
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return { message: text } as T;
+  }
+}
+
 function apiErrorMessage(endpoint: string, error: unknown) {
   const detail = error instanceof Error ? error.message : String(error);
   return `${BACKEND_UNREACHABLE_HINT} Endpoint: ${API_URL}${endpoint}. Detail: ${detail}`;
@@ -90,7 +110,7 @@ export async function submitIntakeEvent(payload: IntakePayload): Promise<IntakeR
       }),
     });
 
-    return parseJson<IntakeResponse>(response);
+    return parseRequiredJson<IntakeResponse>(response, "/api/events");
   } catch (error) {
     throw new Error(apiErrorMessage("/api/events", error));
   }
